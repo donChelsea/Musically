@@ -5,6 +5,7 @@ import android.os.Bundle
 import android.support.v4.media.MediaBrowserCompat
 import android.support.v4.media.session.MediaSessionCompat
 import androidx.media.MediaBrowserServiceCompat
+import com.example.musically2.exoplayer.callbacks.MusicPlayerNotificationListener
 import com.example.musically2.other.Constants.MEDIA_ROOT_ID
 import com.google.android.exoplayer2.SimpleExoPlayer
 import com.google.android.exoplayer2.ext.mediasession.MediaSessionConnector
@@ -33,6 +34,10 @@ class MusicService : MediaBrowserServiceCompat() {
     private lateinit var mediaSession: MediaSessionCompat
     private lateinit var mediaSessionConnector: MediaSessionConnector
 
+    private lateinit var musicNotificationManager: MusicNotificationManager
+
+    var isForegroundService = false
+
     override fun onCreate() {
         super.onCreate()
         val activityIntent = packageManager?.getLaunchIntentForPackage(packageName)?.let {
@@ -45,6 +50,14 @@ class MusicService : MediaBrowserServiceCompat() {
         }
 
         sessionToken = mediaSession.sessionToken
+
+        musicNotificationManager = MusicNotificationManager(
+            this,
+            mediaSession.sessionToken,
+            MusicPlayerNotificationListener(this)
+        ) {
+
+        }
 
         mediaSessionConnector = MediaSessionConnector(mediaSession)
         mediaSessionConnector.setPlayer(exoPlayer)
