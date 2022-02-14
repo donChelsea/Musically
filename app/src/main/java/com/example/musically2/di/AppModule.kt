@@ -22,7 +22,7 @@ object AppModule {
     fun provideMusicServiceConnection(
         @ApplicationContext context: Context
     ) = MusicServiceConnection(context)
-//
+
 //    @Singleton
 //    @Provides
 //    fun provideSwipeSongAdapter() = SwipeSongAdapter()

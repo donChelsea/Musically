@@ -36,13 +36,13 @@ class MusicService : MediaBrowserServiceCompat() {
     @Inject
     lateinit var firebaseMusicSource: FirebaseMusicSource
 
+    private lateinit var musicNotificationManager: MusicNotificationManager
+
     private val serviceJob = Job()
     private val serviceScope = CoroutineScope(Dispatchers.Main + serviceJob)
 
     private lateinit var mediaSession: MediaSessionCompat
     private lateinit var mediaSessionConnector: MediaSessionConnector
-
-    private lateinit var musicNotificationManager: MusicNotificationManager
 
     var isForegroundService = false
 
@@ -82,6 +82,15 @@ class MusicService : MediaBrowserServiceCompat() {
             curSongDuration = exoPlayer.duration
         }
 
+        val musicPlaybackPreparer = MusicPlaybackPreparer(firebaseMusicSource) {
+            curPlayingSong = it
+            preparePlayer(
+                firebaseMusicSource.songs,
+                it,
+                true
+            )
+        }
+
         mediaSessionConnector = MediaSessionConnector(mediaSession)
         mediaSessionConnector.setPlaybackPreparer(musicPlaybackPreparer)
         mediaSessionConnector.setQueueNavigator(MusicQueueNavigator())
@@ -92,13 +101,10 @@ class MusicService : MediaBrowserServiceCompat() {
         musicNotificationManager.showNotification(exoPlayer)
     }
 
-    val musicPlaybackPreparer = MusicPlaybackPreparer(firebaseMusicSource) {
-        curPlayingSong = it
-        preparePlayer(
-            firebaseMusicSource.songs,
-            it,
-            true
-        )
+    private inner class MusicQueueNavigator : TimelineQueueNavigator(mediaSession) {
+        override fun getMediaDescription(player: Player, windowIndex: Int): MediaDescriptionCompat {
+            return firebaseMusicSource.songs[windowIndex].description
+        }
     }
 
     private fun preparePlayer(
@@ -129,7 +135,7 @@ class MusicService : MediaBrowserServiceCompat() {
         clientPackageName: String,
         clientUid: Int,
         rootHints: Bundle?
-    ): BrowserRoot {
+    ): BrowserRoot? {
         return BrowserRoot(MEDIA_ROOT_ID, null)
     }
 
@@ -157,10 +163,27 @@ class MusicService : MediaBrowserServiceCompat() {
             }
         }
     }
-
-    private inner class MusicQueueNavigator : TimelineQueueNavigator(mediaSession) {
-        override fun getMediaDescription(player: Player, windowIndex: Int): MediaDescriptionCompat {
-            return firebaseMusicSource.songs[windowIndex].description
-        }
-    }
 }
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+

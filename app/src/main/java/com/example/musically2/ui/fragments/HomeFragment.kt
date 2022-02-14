@@ -7,7 +7,6 @@ import android.view.ViewGroup
 import androidx.core.view.isVisible
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.activityViewModels
-import androidx.fragment.app.viewModels
 import androidx.recyclerview.widget.LinearLayoutManager
 import com.example.musically2.databinding.FragmentHomeBinding
 import com.example.musically2.other.Status
@@ -23,7 +22,7 @@ class HomeFragment : Fragment() {
     private lateinit var binding: FragmentHomeBinding
 
     @Inject
-    lateinit var songAdapter: SongAdapter
+    lateinit var baseSongAdapter: SongAdapter
 
     override fun onCreateView(
         inflater: LayoutInflater,
@@ -39,13 +38,13 @@ class HomeFragment : Fragment() {
         setupRecyclerView()
         subscribeToObservers()
 
-        songAdapter.setOnItemClickListener {
+        baseSongAdapter.setOnItemClickListener {
             mainViewModel.playOrToggleSong(it)
         }
     }
 
     private fun setupRecyclerView() = binding.rvAllSongs.apply {
-        adapter = songAdapter
+        adapter = baseSongAdapter
         layoutManager = LinearLayoutManager(requireContext())
     }
 
@@ -55,7 +54,7 @@ class HomeFragment : Fragment() {
                 Status.SUCCESS -> {
                     binding.allSongsProgressBar.isVisible = false
                     result.data?.let { songs ->
-                        songAdapter.songs = songs
+                        baseSongAdapter.songs = songs
                     }
                 }
                 Status.ERROR -> Unit

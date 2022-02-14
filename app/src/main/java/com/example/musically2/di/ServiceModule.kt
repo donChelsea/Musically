@@ -7,6 +7,9 @@ import com.google.android.exoplayer2.audio.AudioAttributes
 import com.google.android.exoplayer2.upstream.DefaultDataSourceFactory
 import com.google.android.exoplayer2.util.Util
 import com.example.musically2.data.remote.MusicDatabase
+import com.example.musically2.exoplayer.FirebaseMusicSource
+import com.example.musically2.exoplayer.MusicService
+import com.google.firebase.firestore.FirebaseFirestore
 import dagger.Module
 import dagger.Provides
 import dagger.hilt.InstallIn
@@ -20,7 +23,16 @@ object ServiceModule {
 
     @ServiceScoped
     @Provides
-    fun provideMusicDatabase() = MusicDatabase()
+    fun provideMusicDatabase(firestore: FirebaseFirestore) = MusicDatabase(firestore)
+
+    @ServiceScoped
+    @Provides
+    fun provideFirebaseFirestore(): FirebaseFirestore = FirebaseFirestore.getInstance()
+
+    @ServiceScoped
+    @Provides
+    fun provideFirebaseMusicSource(musicDatabase: MusicDatabase): FirebaseMusicSource =
+        FirebaseMusicSource(musicDatabase)
 
     @ServiceScoped
     @Provides
