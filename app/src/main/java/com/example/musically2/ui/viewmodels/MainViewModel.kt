@@ -2,7 +2,6 @@ package com.example.musically2.ui.viewmodels
 
 import android.support.v4.media.MediaBrowserCompat
 import android.support.v4.media.MediaMetadataCompat.METADATA_KEY_MEDIA_ID
-import androidx.hilt.lifecycle.ViewModelInject
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
@@ -12,7 +11,7 @@ import com.example.musically2.exoplayer.isPlaying
 import com.example.musically2.exoplayer.isPrepared
 import com.example.musically2.other.Constants.MEDIA_ROOT_ID
 import com.example.musically2.other.Resource
-import com.plcoding.spotifycloneyt.data.entities.Song
+import com.example.musically2.data.models.Song
 import dagger.hilt.android.lifecycle.HiltViewModel
 import javax.inject.Inject
 

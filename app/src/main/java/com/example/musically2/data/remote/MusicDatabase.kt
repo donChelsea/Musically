@@ -1,7 +1,7 @@
 package com.example.musically2.data.remote
 
 import com.google.firebase.firestore.FirebaseFirestore
-import com.plcoding.spotifycloneyt.data.entities.Song
+import com.example.musically2.data.models.Song
 import com.example.musically2.other.Constants.SONG_COLLECTION
 import kotlinx.coroutines.tasks.await
 

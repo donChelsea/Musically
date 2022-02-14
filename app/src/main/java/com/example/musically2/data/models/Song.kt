@@ -1,4 +1,4 @@
-package com.plcoding.spotifycloneyt.data.entities
+package com.example.musically2.data.models
 
 data class Song(
     val mediaId: String = "",
